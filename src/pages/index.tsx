@@ -1,12 +1,19 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
+import { useRouter } from "next/router";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Home() {
+export default function Home({ gameTitleList }) {
+  const router = useRouter();
   return (
-    <div>hi</div>
+    <div>
+      {gameTitleList.map((gameTitle) => {
+        return (<div>{gameTitle.gameTitle}</div>)
+      })}
+    </div>
   );
+}
+
+export async function getServerSideProps() {
+  const res = await fetch("http://localhost:9000/api/getAllGameTitle");
+  const gameTitleList = await res.json();
+  console.log(gameTitleList);
+  return { props: { gameTitleList } };
 }
