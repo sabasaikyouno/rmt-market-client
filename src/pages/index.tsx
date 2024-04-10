@@ -14,6 +14,5 @@ export default function Home({ gameTitleList }) {
 export async function getServerSideProps() {
   const res = await fetch("http://localhost:9000/api/getAllGameTitle");
   const gameTitleList = await res.json();
-  console.log(gameTitleList);
   return { props: { gameTitleList } };
 }
