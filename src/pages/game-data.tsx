@@ -8,6 +8,7 @@ import { CardActionArea, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Head from "next/head";
+import Header from "../components/Header";
 
 type GameData = {
   title: String
@@ -20,11 +21,27 @@ type GameData = {
   siteId: number
 }
 
+export default function gameData({ gameDataList, searchOptions }) {
+  return (
+    <div>
+      <Header searchOptions={searchOptions} />
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {gameDataList.map((gameData: GameData) => {
+          return (
+            getCard(gameData)
+          )
+        })}
+      </Grid>
+    </div>
+  );
+}
+
 function getCard(gameData: GameData) {
   return (
     <Grid item xs={2} sm={4} md={4}>
       <Card
         variant="outlined"
+        sx={{ maxWidth: 345, width: "100%" }}
       >
         <CardActionArea>
           <AspectRatio objectFit="contain">
@@ -36,7 +53,7 @@ function getCard(gameData: GameData) {
             />
           </AspectRatio>
           <CardContent>
-            <Typography>{gameData.title}</Typography>
+            <Typography variant="h4">{gameData.title}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -44,22 +61,13 @@ function getCard(gameData: GameData) {
   )
 }
 
-export default function gameData({ gameDataList }) {
-  return (
-    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {gameDataList.map((gameData: GameData) => {
-        return (
-          getCard(gameData)
-        )
-      })}
-    </Grid>
-
-  );
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListById/" + context.query.id);
+  const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
+  return { props: { gameDataList, searchOptions } };
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const url = "http://localhost:9000/api/getGameDataList/" + context.query.id;
+async function getJson(url: String) {
   const res = await fetch(url);
-  const gameDataList = await res.json();
-  return { props: { gameDataList } };
+  return await res.json();
 }
