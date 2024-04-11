@@ -11,7 +11,7 @@ export default function Header({ searchOptions }) {
           <Grid item xs={4}>
             <Autocomplete
               options={searchOptions}
-              renderInput={(params) => <TextField {...params} label="Search" />}
+              renderInput={(params) => <TextField {...params} label="Search" margin="dense" />}
             />
           </Grid>
           <Grid item xs></Grid>
