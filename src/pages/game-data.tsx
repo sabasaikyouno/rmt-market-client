@@ -62,7 +62,7 @@ function getCard(gameData: GameData) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListById/" + context.query.id);
+  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title);
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
   return { props: { gameDataList, searchOptions } };
 }
