@@ -26,13 +26,15 @@ export default function gameData({ gameDataList, searchOptions }) {
   return (
     <div>
       <Header searchOptions={searchOptions} />
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-        {gameDataList.map((gameData: GameData) => {
-          return (
-            getCard(gameData)
-          )
-        })}
-      </Grid>
+      <div>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+          {gameDataList.map((gameData: GameData) => {
+            return (
+              getCard(gameData)
+            )
+          })}
+        </Grid>
+      </div>
     </div>
   );
 }
@@ -67,7 +69,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
 
   //データがなかったら404
-  if(Object.keys(gameDataList).length === 0) {
+  if (Object.keys(gameDataList).length === 0) {
     return {
       notFound: true
     }
