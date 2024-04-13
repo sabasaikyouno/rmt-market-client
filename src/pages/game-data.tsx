@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Head from "next/head";
 import Header from "../components/Header";
+import { notFound } from "next/navigation";
 
 type GameData = {
   title: String
@@ -64,6 +65,14 @@ function getCard(gameData: GameData) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title);
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
+
+  //データがなかったら404
+  if(Object.keys(gameDataList).length === 0) {
+    return {
+      notFound: true
+    }
+  }
+
   return { props: { gameDataList, searchOptions } };
 }
 
