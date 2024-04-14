@@ -4,10 +4,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Button, CardActionArea, Container, CssBaseline, Grid } from '@mui/material';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
-import Head from "next/head";
 import Header from "../components/Header";
 
 type GameData = {
@@ -23,16 +22,16 @@ type GameData = {
 
 export default function gameData({ gameDataList, searchOptions }) {
   return (
-    <div>
-      <Header searchOptions={searchOptions} />
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-        {gameDataList.map((gameData: GameData) => {
-          return (
-            getCard(gameData)
-          )
-        })}
-      </Grid>
-    </div>
+      <Container>
+        <Header searchOptions={searchOptions} />
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2}>
+          {gameDataList.map((gameData: GameData) => {
+            return (
+              getCard(gameData)
+            )
+          })}
+        </Grid>
+      </Container>
   );
 }
 
@@ -64,6 +63,14 @@ function getCard(gameData: GameData) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title);
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
+
+  //データがなかったら404
+  if (Object.keys(gameDataList).length === 0) {
+    return {
+      notFound: true
+    }
+  }
+
   return { props: { gameDataList, searchOptions } };
 }
 

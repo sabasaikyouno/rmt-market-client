@@ -1,4 +1,4 @@
-import { AppBar, Autocomplete, Grid, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Autocomplete, Grid, Link, TextField, Toolbar, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ export default function Header({ searchOptions }) {
       <Toolbar>
         <Grid container spacing={3}>
           <Grid item xs>
-            <Typography variant="h3">rmt-market</Typography>
+            <Link href="/" variant="h3" color="secondry" underline="none">RMT Market</Link>
           </Grid>
           <Grid item xs={4}>
             <Autocomplete
@@ -34,7 +34,3 @@ export default function Header({ searchOptions }) {
     </AppBar>
   )
 }
-
-const serachTitle = [{
-  label: "a"
-}]
