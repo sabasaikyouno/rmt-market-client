@@ -1,18 +1,56 @@
+import Header from "@/components/Header";
+import { AspectRatio } from "@mui/joy";
+import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
-export default function Home({ gameTitleList }) {
-  const router = useRouter();
+export default function Home({ gameTitleDataList, searchOptions }) {
   return (
-    <div>
-      {gameTitleList.map((gameTitle) => {
-        return (<div>{gameTitle.gameTitle}</div>)
-      })}
-    </div>
+    <Container>
+      <Header searchOptions={searchOptions} />
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2} >
+        {gameTitleDataList.map((gameTitleData) => {
+          return(getCard(gameTitleData))
+        })}
+      </Grid>
+    </Container>
   );
 }
 
+function getCard(gameTitleData) {
+  const router = useRouter();
+  return (
+    <Grid item xs={2} sm={4} md={4}>
+      <Card
+        variant="outlined"
+        sx={{ maxWidth: 345, width: "100%" }}
+      >
+        <CardActionArea onClick={e => {
+          router.replace("/game-data?title=" + gameTitleData.gameTitle);
+        }}>
+          <AspectRatio objectFit="contain">
+            <CardMedia
+              component="img"
+              height="140"
+              image={gameTitleData.gameImg}
+            />
+          </AspectRatio>
+          <CardContent>
+            <Typography variant="h4">{gameTitleData.gameTitle}</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Grid>
+  )
+}
+
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:9000/api/getAllGameTitle");
-  const gameTitleList = await res.json();
-  return { props: { gameTitleList } };
+  const gameTitleDataList = await getJson("http://localhost:9000/api/getAllGameTitleData")
+  const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
+  return { props: { gameTitleDataList, searchOptions } };
+}
+
+async function getJson(url: String) {
+  const res = await fetch(url);
+  return await res.json();
 }
