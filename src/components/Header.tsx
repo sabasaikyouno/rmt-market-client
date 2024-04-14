@@ -9,7 +9,7 @@ export default function Header({ searchOptions }) {
       <Toolbar>
         <Grid container spacing={3}>
           <Grid item xs>
-            <Link href="/" variant="h3" color="#212121" underline="none">rmt-market</Link>
+            <Link href="/" variant="h3" color="secondry" underline="none">RMT Market</Link>
           </Grid>
           <Grid item xs={4}>
             <Autocomplete
