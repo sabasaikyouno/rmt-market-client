@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, Container, CssBaseline, Grid } from '@mui/material';
+import { Box, Button, CardActionArea, Container, CssBaseline, Grid, Pagination } from '@mui/material';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Header from "../components/Header";
@@ -20,18 +20,36 @@ type GameData = {
   siteId: number
 }
 
-export default function gameData({ gameDataList, searchOptions }) {
+export default function gameData({ gameDataList, searchOptions, gamePage }) {
+  const router = useRouter();
   return (
-      <Container>
-        <Header searchOptions={searchOptions} />
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2}>
-          {gameDataList.map((gameData: GameData) => {
-            return (
-              getCard(gameData)
-            )
-          })}
-        </Grid>
-      </Container>
+    <Container>
+      <Header searchOptions={searchOptions} />
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2}>
+        {gameDataList.map((gameData: GameData) => {
+          return (
+            getCard(gameData)
+          )
+        })}
+      </Grid>
+      <Box style={{textAlign: "center"}} paddingTop={2} paddingBottom={2}>
+        <Pagination
+          count={gamePage}
+          color="secondary"
+          sx={{ display: 'inline-block' }}
+          size="large"
+          onChange={(e, page) => {
+            router.push({
+              pathname: "/game-data",
+              query: {
+                title: router.query.title,
+                page: page
+              }
+            })
+          }}
+        />
+      </Box>
+    </Container>
   );
 }
 
@@ -61,8 +79,9 @@ function getCard(gameData: GameData) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title);
+  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page);
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
+  const gamePage = await getJson("http://localhost:9000/api/getGameDataPage/" + context.query.title);
 
   //データがなかったら404
   if (Object.keys(gameDataList).length === 0) {
@@ -71,7 +90,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  return { props: { gameDataList, searchOptions } };
+  return { props: { gameDataList, searchOptions, gamePage } };
 }
 
 async function getJson(url: String) {
