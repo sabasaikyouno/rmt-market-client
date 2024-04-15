@@ -19,7 +19,7 @@ export default function Header({ searchOptions }) {
                 <TextField
                   onKeyDown={e => {
                     if (e.key == "Enter") {
-                      router.replace("/game-data?title=" + e.target.value);
+                      router.replace("/game-data?title=" + e.target.value + "&page=1");
                     }
                   }}
                   {...params}
