@@ -26,7 +26,7 @@ function getCard(gameTitleData) {
         sx={{ maxWidth: 345, width: "100%" }}
       >
         <CardActionArea onClick={e => {
-          router.replace("/game-data?title=" + gameTitleData.gameTitle);
+          router.replace("/game-data?title=" + gameTitleData.gameTitle + "&page=1");
         }}>
           <AspectRatio objectFit="contain">
             <CardMedia
