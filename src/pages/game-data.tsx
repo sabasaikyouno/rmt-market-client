@@ -70,7 +70,8 @@ function getCard(gameData: GameData) {
             />
           </AspectRatio>
           <CardContent>
-            <Typography variant="h4">{gameData.title}</Typography>
+            <Typography variant="h5">{gameData.title}</Typography>
+            <Typography variant="h5" sx={{ textAlign: "right" }} color="error" paddingTop={2}>{gameData.price}円</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
