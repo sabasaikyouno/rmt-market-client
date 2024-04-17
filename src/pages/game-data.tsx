@@ -4,10 +4,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Box, Button, CardActionArea, Container, CssBaseline, Grid, Pagination } from '@mui/material';
+import { Box, Button, CardActionArea, Container, CssBaseline, Grid, Pagination, Tab, Tabs } from '@mui/material';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Header from "../components/Header";
+import CategoryTabs from "@/components/CategoryTabs";
 
 type GameData = {
   title: String
@@ -20,11 +21,12 @@ type GameData = {
   siteId: number
 }
 
-export default function gameData({ gameDataList, searchOptions, gamePage }) {
+export default function gameData({ gameDataList, searchOptions, gamePage, categoryList }) {
   const router = useRouter();
   return (
     <Container>
       <Header searchOptions={searchOptions} />
+      <CategoryTabs categoryList={categoryList} />
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2}>
         {gameDataList.map((gameData: GameData) => {
           return (
@@ -80,9 +82,10 @@ function getCard(gameData: GameData) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const gameDataList = await getJson("http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page);
+  const gameDataList = await getJson(getGameDataUrl(context));
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
   const gamePage = await getJson("http://localhost:9000/api/getGameDataPage/" + context.query.title);
+  const categoryList = await getJson("http://localhost:9000/api/getCategory/" + context.query.title);
 
   //データがなかったら404
   if (Object.keys(gameDataList).length === 0) {
@@ -91,10 +94,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  return { props: { gameDataList, searchOptions, gamePage } };
+  return { props: { gameDataList, searchOptions, gamePage, categoryList } };
 }
 
 async function getJson(url: String) {
   const res = await fetch(url);
   return await res.json();
+}
+
+function getGameDataUrl(context) {
+  return(
+    "http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page + "&category=" + context.query.category
+  )
 }
