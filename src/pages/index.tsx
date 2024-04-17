@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import { AspectRatio } from "@mui/joy";
 import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
 export default function Home({ gameTitleDataList, searchOptions }) {
@@ -26,7 +25,14 @@ function getCard(gameTitleData) {
         sx={{ maxWidth: 345, width: "100%" }}
       >
         <CardActionArea onClick={e => {
-          router.replace("/game-data?title=" + gameTitleData.gameTitle);
+          router.push({
+            pathname: "/game-data",
+            query: {
+              title: gameTitleData.gameTitle,
+              page: 1,
+              category: "全て"
+            }
+          })
         }}>
           <AspectRatio objectFit="contain">
             <CardMedia
