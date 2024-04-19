@@ -103,7 +103,13 @@ async function getJson(url: String) {
 }
 
 function getGameDataUrl(context) {
-  return(
-    "http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page + "&category=" + context.query.category
-  )
+  const url = "http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page + "&category=" + context.query.category;
+
+  if (context.query.search === undefined) {
+    return url;
+  } else {
+    return (
+      url + "&search=" + context.query.search
+    )
+  }
 }
