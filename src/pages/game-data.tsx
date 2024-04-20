@@ -45,7 +45,8 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
               pathname: "/game-data",
               query: {
                 title: router.query.title,
-                page: page
+                page: page,
+                category: router.query.category
               }
             })
           }}
@@ -84,7 +85,7 @@ function getCard(gameData: GameData) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const gameDataList = await getJson(getGameDataUrl(context));
   const searchOptions = await getJson("http://localhost:9000/api/getSearchOptions");
-  const gamePage = await getJson("http://localhost:9000/api/getGameDataPage/" + context.query.title);
+  const gamePage = await getJson(getGamePageUrl(context));
   const categoryList = await getJson("http://localhost:9000/api/getCategory/" + context.query.title);
 
   //データがなかったら404
@@ -104,6 +105,18 @@ async function getJson(url: String) {
 
 function getGameDataUrl(context) {
   const url = "http://localhost:9000/api/getGameDataListByTitle/" + context.query.title + "?page=" + context.query.page + "&category=" + context.query.category;
+
+  if (context.query.search === undefined) {
+    return url;
+  } else {
+    return (
+      url + "&search=" + context.query.search
+    )
+  }
+}
+
+function getGamePageUrl(context) {
+  const url = "http://localhost:9000/api/getGameDataPage/" + context.query.title + "?category=" + context.query.category;
 
   if (context.query.search === undefined) {
     return url;
