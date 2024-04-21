@@ -34,7 +34,7 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
           )
         })}
       </Grid>
-      <Box style={{textAlign: "center"}} paddingTop={2} paddingBottom={2}>
+      <Box style={{ textAlign: "center" }} paddingTop={2} paddingBottom={2}>
         <Pagination
           count={gamePage}
           color="secondary"
@@ -57,13 +57,16 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
 }
 
 function getCard(gameData: GameData) {
+  const router = useRouter();
   return (
     <Grid item xs={2} sm={4} md={4}>
       <Card
         variant="outlined"
         sx={{ maxWidth: 345, width: "100%" }}
       >
-        <CardActionArea>
+        <CardActionArea onClick={e => {
+          router.push(gameData.url);
+        }}>
           <AspectRatio objectFit="contain">
             <CardMedia
               component="img"
