@@ -44,9 +44,8 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
             router.push({
               pathname: "/game-data",
               query: {
-                title: router.query.title,
-                page: page,
-                category: router.query.category
+                ...router.query,
+                page: page
               }
             })
           }}
