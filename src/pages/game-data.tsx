@@ -58,10 +58,10 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
 function getCard(gameData: GameData) {
   const router = useRouter();
   return (
-    <Grid item xs={2} sm={4} md={4}>
+    <Grid item xs={10} sm={4} md={4}>
       <Card
         variant="outlined"
-        sx={{ maxWidth: 345, width: "100%" }}
+        sx={{ width: "100%" }}
       >
         <CardActionArea onClick={e => {
           router.push(gameData.url);
