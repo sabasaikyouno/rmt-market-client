@@ -71,6 +71,7 @@ function getCard(gameData: GameData) {
               component="img"
               height="140"
               image={gameData.imgSrc}
+              onError={(e) => {e.target.src = "/noimg.svg"}}
               loading="lazy"
             />
           </AspectRatio>
