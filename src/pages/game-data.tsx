@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Header from "../components/Header";
 import CategoryTabs from "@/components/CategoryTabs";
+import Head from "next/head";
 
 type GameData = {
   title: String
@@ -25,6 +26,9 @@ export default function gameData({ gameDataList, searchOptions, gamePage, catego
   const router = useRouter();
   return (
     <Container>
+      <Head>
+        <title>{router.query.title}の代行、アカウントデータ、RMTの販売一覧 RMT Market</title>
+      </Head>
       <Header searchOptions={searchOptions} />
       <CategoryTabs categoryList={categoryList} />
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop={2}>
