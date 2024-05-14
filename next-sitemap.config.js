@@ -5,6 +5,7 @@ module.exports = {
   additionalPaths: async () => {
     return await genePaths();
   },
+  exclude: ["/game-data"],
 };
 
 const genePaths = async () => {
