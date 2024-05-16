@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import { AspectRatio } from "@mui/joy";
 import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Home({ gameTitleDataList, searchOptions }) {
@@ -39,6 +40,7 @@ function getCard(gameTitleData) {
               component="img"
               height="140"
               image={gameTitleData.gameImg}
+              alt={gameTitleData.gameTitle}
             />
           </AspectRatio>
           <CardContent>
